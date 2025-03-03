@@ -25,3 +25,12 @@ BotFather — это официальный бот от Telegram, который
    ```plaintext
    BOT_TOKEN=123456789:ABCdefGhIJKlmNoPQRstuVWXyz
    ```
+   
+## 3. Проверка работы
+
+Убедитесь, что файл .env находится в корневой директории проекта.
+
+Запустите скрипт:
+```bash
+    python bot.py
+```

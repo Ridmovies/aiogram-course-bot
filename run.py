@@ -4,10 +4,10 @@ import sys
 from os import getenv
 from dotenv import load_dotenv
 
-from aiogram import Bot, Dispatcher, html
+from aiogram import Bot, Dispatcher, html, F
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
 
@@ -33,6 +33,42 @@ async def command_start_handler(message: Message) -> None:
     # method automatically or call API method directly via
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
     await message.answer(f"Hello, {html.bold(message.from_user.full_name)}!")
+
+
+@dp.message(Command('help'))
+async def get_help(message: Message) -> None:
+    await message.answer("Help")
+
+
+@dp.message(F.text == "Hello")
+async def hello(message: Message) -> None:
+    await message.answer("Hello to you too!")
+
+
+@dp.message(F.photo)
+async def handle_photo(message: Message) -> None:
+    await message.answer(f"Nice photo! ID: {message.photo[-1].file_id}")
+
+
+@dp.message(Command("get_photo"))
+async def get_photo(message: Message) -> None:
+    await message.answer_photo(
+        photo="AgACAgIAAxkBAAMRZ8WPR86YzV5U5wG4DnZAwbHFeGsAAnDsMRtVLilK7HE5lwEEtGMBAAMCAAN5AAM2BA",
+        caption="Nice photo!",
+    )
+
+@dp.message(Command("get_message"))
+async def get_message(message: Message) -> None:
+    for key, value in message.__dict__.items():
+        if isinstance(value, dict):
+            print({key: value})
+        else:
+            print(f"{key}: {value}")
+
+
+@dp.message(Command("reply"))
+async def reply(message: Message) -> None:
+    await message.reply("Reply message")
 
 
 @dp.message()
