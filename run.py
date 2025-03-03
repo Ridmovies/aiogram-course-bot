@@ -2,6 +2,8 @@ import asyncio
 import logging
 import sys
 from os import getenv
+
+from aiogram.utils.token import TokenValidationError
 from dotenv import load_dotenv
 
 from aiogram import Bot, Dispatcher
@@ -28,7 +30,10 @@ async def main() -> None:
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
     # And the run events dispatching
-    await dp.start_polling(bot)
+    try:
+        await dp.start_polling(bot)
+    except TokenValidationError as e:
+        print(f"Ошибка валидации токена: {e}")
 
 
 if __name__ == "__main__":
