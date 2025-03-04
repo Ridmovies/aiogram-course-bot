@@ -6,7 +6,7 @@ from app.keyboards import (
     get_inline_keyboard,
     get_reply_keyboard,
     main_kb,
-    reply_cars_kb
+    reply_cars_kb, inline_cars_kb
 )
 
 router = Router()
@@ -93,11 +93,11 @@ async def handle_inline_buttons(callback: CallbackQuery) -> None:
 
     # Отвечаем на нажатие кнопки
     if button_data == "button1":
-        await callback.answer("Вы нажали Кнопку 1!")
+        await callback.answer("callback.answer")
     elif button_data == "button2":
-        await callback.answer("Вы нажали Кнопку 2!")
+        await callback.answer("show_alert=True", show_alert=True)
     elif button_data == "button3":
-        await callback.answer("Вы нажали Кнопку 3!")
+        await callback.message.edit_text("Edited message", reply_markup=await inline_cars_kb())
 
     # Убираем "часики" (индикатор загрузки) после нажатия
     await callback.answer()

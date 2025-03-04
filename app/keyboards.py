@@ -22,6 +22,7 @@ def get_inline_keyboard() -> InlineKeyboardMarkup:
         inline_keyboard=[
             [InlineKeyboardButton(text="Кнопка 1", callback_data="button1")],
             [InlineKeyboardButton(text="Кнопка 2", callback_data="button2")],
+            [InlineKeyboardButton(text="Кнопка 3", callback_data="button3")],
             [InlineKeyboardButton(text="https://example.com", url="https://example.com")],
         ]
     )
@@ -43,5 +44,13 @@ async def reply_cars_kb():
     keyboard = ReplyKeyboardBuilder()
     for car in cars:
         keyboard.button(text=car)
+    keyboard.adjust(2, 2)
+    return keyboard.as_markup()
+
+
+async def inline_cars_kb():
+    keyboard = InlineKeyboardBuilder()
+    for car in cars:
+        keyboard.button(text=car, url=f"https://www.google.com/search?q={car}")
     keyboard.adjust(2, 2)
     return keyboard.as_markup()
