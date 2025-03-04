@@ -12,6 +12,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
 from app.handlers import router
+from app.dev_handlers import dev_router
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -27,7 +28,9 @@ dp = Dispatcher()
 
 
 async def main() -> None:
+    # Добавляем роутеры
     dp.include_router(router)
+    dp.include_router(dev_router)
     # Initialize Bot instance with default bot properties which will be passed to all API calls
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 

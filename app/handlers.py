@@ -37,7 +37,6 @@ async def cmd_start(message: Message):
                          reply_markup=main_kb())
 
 
-
 @router.message(Command('help'))
 async def get_help(message: Message) -> None:
     await message.answer("Help")
