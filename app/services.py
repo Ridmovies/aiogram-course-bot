@@ -16,13 +16,11 @@ class BaseService:
             result = await session.execute(query)
             return result.scalars().all()
 
-    # @classmethod
-    # async def create(cls, session: AsyncSession, data, user_id: int = None):
-    #     data_dict = data.model_dump()
-    #     if user_id is not None:
-    #         instance = cls.model(**data_dict, user_id=user_id)
-    #     else:
-    #         instance = cls.model(**data_dict)
-    #     session.add(instance)
-    #     await session.commit()
-    #     return instance
+    @classmethod
+    async def create(cls, data):
+        async with async_session() as session:
+            data_dict = data.model_dump()
+            instance = cls.model(**data_dict)
+            session.add(instance)
+            await session.commit()
+            return instance
