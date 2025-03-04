@@ -1,7 +1,9 @@
 from aiogram import F, html, Router
 from aiogram.filters import CommandStart, Command
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+from app.forms import Form
 from app.keyboards import (
     get_inline_keyboard,
     get_reply_keyboard,
@@ -110,16 +112,49 @@ async def show_inline_cars(message: Message) -> None:
     # Отправляем сообщение с Inline-клавиатурой
     await message.answer("Выберите кнопку:", reply_markup=keyboard)
 
-@router.message()
-async def echo_handler(message: Message) -> None:
-    """
-    Handler will forward receive a message back to the sender
 
-    By default, message handler will handle all message types (like a text, photo, sticker etc.)
-    """
-    try:
-        # Send a copy of the received message
-        await message.send_copy(chat_id=message.chat.id)
-    except TypeError:
-        # But not all the types is supported to be copied so need to handle it
-        await message.answer("Nice try!")
+
+
+# @router.message()
+# async def echo_handler(message: Message) -> None:
+#     """
+#     Handler will forward receive a message back to the sender
+#
+#     By default, message handler will handle all message types (like a text, photo, sticker etc.)
+#     """
+#     try:
+#         # Send a copy of the received message
+#         await message.send_copy(chat_id=message.chat.id)
+#     except TypeError:
+#         # But not all the types is supported to be copied so need to handle it
+#         await message.answer("Nice try!")
+
+################# State handlers #################
+
+# Регистрация сообщений
+@router.message(Command("reg"))
+async def reg_form(message: Message, state: FSMContext):
+    await state.set_state(Form.name)
+    await message.answer("Как вас зовут?")
+
+@router.message(Form.name)
+async def process_name(message: Message, state: FSMContext):
+    name = message.text
+    await state.update_data(name=name)
+    await state.set_state(Form.age)
+    await message.reply("Сколько вам лет?")
+
+@router.message(Form.age)
+async def process_age(message: Message, state: FSMContext):
+    age = message.text
+    await state.update_data(age=age)
+    await state.set_state(Form.gender)
+    await message.reply("Какой у вас пол?")
+
+@router.message(Form.gender)
+async def process_gender(message: Message, state: FSMContext):
+    gender = message.text
+    await state.update_data(gender=gender)
+    data = await state.get_data()
+    await message.answer(f"{data['name']}, {data['age']} лет, пол: {data['gender']} \nИнформация успешно сохранена!")
+    await state.clear()

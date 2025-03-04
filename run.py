@@ -3,6 +3,7 @@ import logging
 import sys
 from os import getenv
 
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.utils.token import TokenValidationError
 from dotenv import load_dotenv
 
@@ -18,9 +19,12 @@ load_dotenv()
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN: str = getenv("BOT_TOKEN")
 
-# All handlers should be attached to the Router (or Dispatcher)
+# Для хранения состояний можно использовать MemoryStorage (в памяти)
+storage = MemoryStorage()
 
-dp = Dispatcher()
+# All handlers should be attached to the Router (or Dispatcher)
+dp = Dispatcher(srorage=storage)
+
 
 
 
