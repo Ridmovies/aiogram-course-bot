@@ -10,8 +10,13 @@ from app.keyboards import (
     main_kb,
     reply_cars_kb, inline_cars_kb
 )
+from app.middlewares import TestMiddleware
 
 router = Router()
+# Для команд
+router.message.middleware(TestMiddleware())
+# Для всех событий
+# router.message.outer_middleware(TestMiddleware())
 
 # @router.message(CommandStart())
 # async def command_start_handler(message: Message) -> None:

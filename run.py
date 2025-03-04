@@ -20,12 +20,10 @@ load_dotenv()
 TOKEN: str = getenv("BOT_TOKEN")
 
 # Для хранения состояний можно использовать MemoryStorage (в памяти)
-storage = MemoryStorage()
+# storage = MemoryStorage()
 
 # All handlers should be attached to the Router (or Dispatcher)
-dp = Dispatcher(srorage=storage)
-
-
+dp = Dispatcher()
 
 
 async def main() -> None:
