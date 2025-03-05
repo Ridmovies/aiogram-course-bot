@@ -11,6 +11,7 @@ on:
 jobs:
   # Job для сборки и деплоя
   build-and-deploy:
+    if: false # Отключаем автоматический запуск workflow
     runs-on: ubuntu-latest  # Запуск на последней версии Ubuntu
 
     steps:
