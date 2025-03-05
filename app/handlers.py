@@ -39,10 +39,19 @@ async def cmd_start(message: Message):
 
 @router.message(Command('help'))
 async def get_help(message: Message) -> None:
-    await message.answer("Help")
+    await message.answer(f""" помощь по командам бота:
+    /hello - Приветствие
+    /help - помощь по командам бота
+    /get_photo - показать фото
+    /get_message - показать информацию о сообщении в консоль
+    /reply - показать кнопки Reply
+    /inline - показать кнопки Inline
+    /cars - показать кнопки Inline с машинами
+    /reg - запуск тестовой формы регистрации (состояния)
+    """)
 
 
-@router.message(F.text == "Hello")
+@router.message(F.text == "hello")
 async def hello(message: Message) -> None:
     await message.answer("Hello to you too!")
 
@@ -66,11 +75,6 @@ async def get_message(message: Message) -> None:
             print({key: value})
         else:
             print(f"{key}: {value}")
-
-
-# @router.message(Command("reply"))
-# async def reply(message: Message) -> None:
-#     await message.reply("Reply message")
 
 
 # Обработчик команды /reply
@@ -112,7 +116,7 @@ async def handle_inline_buttons(callback: CallbackQuery) -> None:
 @router.message(Command("cars"))
 async def show_inline_cars(message: Message) -> None:
     # Получаем клавиатуру
-    keyboard = await reply_cars_kb()
+    keyboard = await inline_cars_kb()
     # Отправляем сообщение с Inline-клавиатурой
     await message.answer("Выберите кнопку:", reply_markup=keyboard)
 
@@ -133,32 +137,3 @@ async def show_inline_cars(message: Message) -> None:
 #         # But not all the types is supported to be copied so need to handle it
 #         await message.answer("Nice try!")
 
-################# State handlers #################
-
-# Регистрация сообщений
-@router.message(Command("reg"))
-async def reg_form(message: Message, state: FSMContext):
-    await state.set_state(Form.name)
-    await message.answer("Как вас зовут?")
-
-@router.message(Form.name)
-async def process_name(message: Message, state: FSMContext):
-    name = message.text
-    await state.update_data(name=name)
-    await state.set_state(Form.age)
-    await message.reply("Сколько вам лет?")
-
-@router.message(Form.age)
-async def process_age(message: Message, state: FSMContext):
-    age = message.text
-    await state.update_data(age=age)
-    await state.set_state(Form.gender)
-    await message.reply("Какой у вас пол?")
-
-@router.message(Form.gender)
-async def process_gender(message: Message, state: FSMContext):
-    gender = message.text
-    await state.update_data(gender=gender)
-    data = await state.get_data()
-    await message.answer(f"{data['name']}, {data['age']} лет, пол: {data['gender']} \nИнформация успешно сохранена!")
-    await state.clear()

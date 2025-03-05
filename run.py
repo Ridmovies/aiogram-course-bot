@@ -14,6 +14,7 @@ from aiogram.enums import ParseMode
 from app.handlers import router
 from app.dev_handlers import dev_router
 from app.users.handlers import user_router
+from app.states import reg_router
 
 # Загружаем переменные окружения из файла .env
 load_dotenv()
@@ -33,6 +34,7 @@ async def main() -> None:
     dp.include_router(router)
     dp.include_router(dev_router)
     dp.include_router(user_router)
+    dp.include_router(reg_router)
     # Initialize Bot instance with default bot properties which will be passed to all API calls
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
