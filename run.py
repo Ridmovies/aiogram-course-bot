@@ -20,7 +20,7 @@ from app.states import reg_router
 load_dotenv()
 
 # Bot token can be obtained via https://t.me/BotFather
-TOKEN: str = getenv("BOT_TOKEN")
+TOKEN: str = getenv("TOKEN")
 
 if not TOKEN:
     raise ValueError("Токен не найден в переменных окружения!")
