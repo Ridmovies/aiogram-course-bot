@@ -22,6 +22,9 @@ load_dotenv()
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN: str = getenv("BOT_TOKEN")
 
+if not TOKEN:
+    raise ValueError("Токен не найден в переменных окружения!")
+
 # Для хранения состояний можно использовать MemoryStorage (в памяти)
 # storage = MemoryStorage()
 
