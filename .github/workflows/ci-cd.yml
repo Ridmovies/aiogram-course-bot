@@ -53,5 +53,12 @@ jobs:
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/aiogram-bot:latest  # Скачиваем последний образ из Docker Hub
           docker stop aiogram-bot || true  # Останавливаем текущий контейнер (если он существует)
           docker rm aiogram-bot || true  # Удаляем текущий контейнер (если он существует)
-          docker run -d --name aiogram-bot ${{ secrets.DOCKER_HUB_USERNAME }}/aiogram-bot:latest  # Запускаем новый контейнер
+          docker run -d --name aiogram-bot -e TOKEN=${{ secrets.TOKEN }} ${{ secrets.DOCKER_HUB_USERNAME }}/aiogram-bot:latest  # Запускаем новый контейнер с токеном
         "
+
+    # Шаг 7: Локальный запуск контейнера для тестирования (опционально)
+    - name: Run container locally for testing
+      env:
+        TOKEN: ${{ secrets.TOKEN }}  # Используем секрет из GitHub Secrets
+      run: |
+        docker run -d --name aiogram-bot-test -e TOKEN=$TOKEN ${{ secrets.DOCKER_HUB_USERNAME }}/aiogram-bot:latest  # Запускаем контейнер локально для тестирования
